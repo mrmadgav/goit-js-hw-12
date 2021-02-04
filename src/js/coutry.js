@@ -2,17 +2,17 @@
 import refs from './refs';
 import countryCard from '../templates/countryCard.hbs';
 import countryList from '../templates/countryList.hbs';
-// import fetchCountries from './fetchCountries'
+import { fetchCountries } from './fetchCountries';
 import '@pnotify/core/dist/BrightTheme.css';
 let { error } = require('@pnotify/core');
 let debounce = require('lodash.debounce');
 
 refs.searchForm.addEventListener('input', debounce(inputSearch, 500));
-let mainApi = 'https://restcountries.eu/rest/v2/name/';
+// let mainApi = 'https://restcountries.eu/rest/v2/name/';
 
-function fetchCountries(query) {
-  return fetch(mainApi + query).then(res => res.json());
-}
+// function fetchCountries(query) {
+//   return fetch(mainApi + query).then(res => res.json());
+// }
 
 function inputSearch(e) {
   e.preventDefault();
@@ -46,9 +46,9 @@ function inputSearch(e) {
 
 function buildListMarkup(countries, template) {
   let markup = countries.map(count => template(count)).join();
-  refs.articlesContainer.insertAdjacentHTML('afterbegin', markup);
+  refs.card.insertAdjacentHTML('afterbegin', markup);
 }
 
 function clearArticlesContainer() {
-  refs.articlesContainer.innerHTML = '';
+  refs.card.innerHTML = '';
 }
