@@ -8,11 +8,6 @@ let { error } = require('@pnotify/core');
 let debounce = require('lodash.debounce');
 
 refs.searchForm.addEventListener('input', debounce(inputSearch, 500));
-// let mainApi = 'https://restcountries.eu/rest/v2/name/';
-
-// function fetchCountries(query) {
-//   return fetch(mainApi + query).then(res => res.json());
-// }
 
 function inputSearch(e) {
   e.preventDefault();
@@ -24,27 +19,34 @@ function inputSearch(e) {
       if (data.length > 10) {
         error({
           text: 'Too many matches found. Please enter a more specific query!',
+          animation: 'fade',
+          hide: true,
+          delay: 2000,
         });
       } else if (data.status === 404) {
         error({
           text:
             'No country has been found. Please enter a more specific query!',
+          animation: 'fade',
+          hide: true,
+          delay: 2000,
         });
       } else if (data.length === 1) {
-        buildListMarkup(data, countryCard);
+        makeList(data, countryCard);
       } else if (data.length <= 10) {
-        buildListMarkup(data, countryList);
+        makeList(data, countryList);
       }
     })
-    .catch(Error => {
-      Error({
-        text: 'You must enter query parameters!',
+    .catch(error => {
+      error({
+        text: 'Not valid query!',
+        hide: true,
+        delay: 2000,
       });
-      console.log(Error);
     });
 }
 
-function buildListMarkup(countries, template) {
+function makeList(countries, template) {
   let markup = countries.map(count => template(count)).join();
   refs.card.insertAdjacentHTML('afterbegin', markup);
 }
